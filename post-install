@@ -26,9 +26,22 @@ for ppa in \
     add-apt-repository --yes --no-update $ppa
 done
 
-apt-get remove -y $(grep '^-' "$D/manifest" | sed 's/^.//')
+if [ -d /var/cache/snapd ]; then
+    snaps="$(snap list | grep -v -e Name -e 'core$' | cut -d' ' -f1 | tac)"
+    for i in $snaps; do
+        snap remove --purge $i
+    done
+    rm -rf /var/cache/snapd/
+fi
+
+# APT upgrade/install/remove
+apt-get remove -y --purge $(grep '^-' "$D/manifest" | sed 's/^.//')
 apt-get autoremove -y
 apt-get update
 apt-get upgrade -y
 apt-get install -y $(grep '^+' "$D/manifest" | sed 's/^.//')
 apt-get autoremove -y
+
+# clean up dead directories
+rm -rf /var/lib/command-not-found
+rm -rf /home/*/snap

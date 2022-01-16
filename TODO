@@ -10,22 +10,15 @@ User
    \$ cd ~/proj && git svn clone svn+ssh://alistair_boyle@svn.code.sf.net/p/eidors3d/code/trunk eidors3d.git
 - install matlab
    \$ cd ~/bin && ln -sf /opt/matlab/r2017a/bin/matlab
-- install netgen
 - install the eidors wrapper
    \$ scp aboyle.ca:~/bin/eidors ~/bin/
 - get most recent repositories (depot)
+- x48 calculator emulator
 
 
 System
 ======
 - setup restic (backup)
-- netgen
-  maybe...
-   $ sudo apt install libxmu-dev mesa-common-dev libglu1-mesa-dev libx11-dev python3-dev
-   $ cd ~/proj/eidors3d.git/dev/a_boyle && ./install-netgen-6.0-beta
-- gmsh
-- blender
-- remove snapd
 - setup printer, see printer.txt
    \$ scp aboyle.ca:~/printer.txt
 
@@ -33,9 +26,10 @@ Not Automated
 =============
 - pair Signal with phone
 - add ssh authorized_keys to grendel (post-install)
-- Nextcloud client config
 - KeepassXC config
 - Teams config
 - SSH keys to sourceforge
 - SSH keys to github
 - SSH keys to work
+- config nextcloud-desktop: add account, mono icon, autostartup, disable sync of some directories
+- config gnome-system-monitor: disable icon, disable text and width=20 for {cpu,mem,net}

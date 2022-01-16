@@ -1,9 +1,13 @@
 -command-not-found
 -thunderbird
 -transmission-gtk
+-snapd
+-gnome-software-plugin-snap
 +ansible
 +autoconf
++blender
 +debconf-utils
++firefox
 +fonts-firacode
 +freecad
 +gfortran
@@ -12,6 +16,9 @@
 +git-annex
 +gitk
 +git-svn
++gmsh
++gnome-shell-extension-system-monitor
++gnome-shell-extension-weather
 +inkscape
 +keepassxc
 +kicad
@@ -20,6 +27,7 @@
 +libopenblas-dev
 +libsuitesparse-dev
 +nautilus-nextcloud
++netgen
 +nextcloud-desktop
 +nextcloud-desktop-cmd
 +prusa-slicer

@@ -20,6 +20,20 @@ gsettings set ${gschema}:${gpath} use-system-font false
 # set background
 gsettings set org.gnome.desktop.background picture-uri 'file:///usr/share/backgrounds/hardy_wallpaper_uhd.png'
 
+# setup launcher
+gsettings set org.gnome.shell.extensions.dash-to-dock dock-position RIGHT
+gsettings set org.gnome.shell.extensions.dash-to-dock dash-max-icon-size 24
+gsettings set org.gnome.shell.extensions.dash-to-dock dock-fixed false
+gsettings set org.gnome.shell.extensions.dash-to-dock autohide true
+gnome-extensions enable openweather-extension@jenslody.de
+gsettings set org.gnome.shell.extensions.openweather unit celsius
+gsettings set org.gnome.shell.extensions.openweather wind-speed-unit knots
+gsettings set org.gnome.shell.extensions.openweather pressure-unit kPa
+gsettings set org.gnome.shell.extensions.openweather city '45.4211435,-75.6900574>Ottawa, (Old) Ottawa, Ottawa, Eastern Ontario, Ontario, K1P 1J1, Canada >0'
+gsettings set org.gnome.shell.extensions.openweather days-forecast 3
+gnome-extensions enable system-monitor@paradoxxx.zero.gmail.com
+
+
 
 # GIT
 git config --global alias.st "status --short"
@@ -35,7 +49,6 @@ git config --global commit.gpgsign 1
 [ -f ~/.ssh/id_rsa ] || ssh-keygen -f ~/.ssh/id_rsa
 #eval $(ssh-agent)
 #ssh-add
-ssh aboyle.ca echo
 
 [ -f ~/.ssh/authorized_keys ] || echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDoGpL150gYTove/PA5+FuO6dj8SewqL2XsklHu/U+uk3FNIY8hcG1DuSNo7dF+Gx6tU7E0lLMh5rwW58ps/R2xSY1obNEfypLd+8E6Ql7cXYjKUjae3rxEPiVtjvMxDd9vGqL3I0gXN2GNyoaA+7YYgXMXgRvDnoipNohFkeVL+2jKRbWj+scbIeueTjqfGa8x96YZ+1WytnoBJmXdrw831r76CuFAYbxM03ZqSU+rgJPAqJhL8BQ1uDJxJNdUu5rxKlE0TujXkG+yR3XtCs0oCA01h+r+OeRm1hJAUDntfPjfbkWabBqqcuQD3Ze0zq08RYnURfzerDxRkkk8UJOZ boyle@grendel" | cat ~/.ssh/id_rsa.pub - > ~/.ssh/authorized_keys
 chmod 600 ~/.ssh/authorized_keys
