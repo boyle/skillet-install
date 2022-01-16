@@ -15,10 +15,11 @@ User
 - get most recent repositories (depot)
 - x48 calculator emulator
 
-
 System
 ======
 - setup restic (backup)
+- discord
+- zoom
 - setup printer, see printer.txt
    \$ scp aboyle.ca:~/printer.txt
 
@@ -33,3 +34,4 @@ Not Automated
 - SSH keys to work
 - config nextcloud-desktop: add account, mono icon, autostartup, disable sync of some directories
 - config gnome-system-monitor: disable icon, disable text and width=20 for {cpu,mem,net}
+- config steam: add account
