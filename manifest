@@ -7,10 +7,12 @@
 +fonts-firacode
 +freecad
 +gfortran
++gimp
 +git
 +git-annex
 +gitk
 +git-svn
++inkscape
 +keepassxc
 +kicad
 +libblas-dev
@@ -22,6 +24,7 @@
 +nextcloud-desktop-cmd
 +prusa-slicer
 +signal-desktop
++teams
 +tigervnc-viewer
 +vim
 +virtualbox

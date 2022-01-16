@@ -11,11 +11,17 @@ if [[ ! -f $key ]]; then
     wget -O- https://updates.signal.org/desktop/apt/keys.asc | \
         gpg --dearmor > $key
 fi
+key=/etc/apt/trusted.gpg.d/microsoft-teams-keyring.gpg
+if [[ ! -f $key ]]; then
+    wget -O- https://packages.microsoft.com/keys/microsoft.asc | \
+        gpg --dearmor > $key
+fi
 
 for ppa in \
 	ppa:kicad/kicad-6.0-releases \
 	ppa:freecad-maintainers/freecad-stable \
 	'deb [arch=amd64] https://updates.signal.org/desktop/apt xenial main' \
+	'deb [arch=amd64] https://packages.microsoft.com/repos/ms-teams stable main' \
 	; do
     add-apt-repository --yes --no-update $ppa
 done
