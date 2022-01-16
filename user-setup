@@ -1,0 +1,46 @@
+#! /bin/bash -ex
+(groups $USER | grep dialout) || sudo usermod -aG dialout $USER
+
+# Gnome Terminal settings
+gprofile=$(gsettings get org.gnome.Terminal.ProfilesList default | head -1 | sed "s/'//g")
+gschema=org.gnome.Terminal.Legacy.Profile
+gpath=/org/gnome/terminal/legacy/profiles:/:${gprofile}/
+gsettings set ${gschema}:${gpath} audible-bell false # Ding!
+gsettings set ${gschema}:${gpath} use-theme-colors false # Solarized Dark
+gsettings set ${gschema}:${gpath} foreground-color 'rgb(131,148,150)'
+gsettings set ${gschema}:${gpath} background-color 'rgb(0,43,54)'
+gsettings set ${gschema}:${gpath} palette "['rgb(7,54,66)', 'rgb(220,50,47)', 'rgb(133,153,0)', 'rgb(181,137,0)', 'rgb(38,139,210)', 'rgb(211,54,130)', 'rgb(42,161,152)', 'rgb(238,232,213)', 'rgb(0,43,54)', 'rgb(203,75,22)', 'rgb(88,110,117)', 'rgb(101,123,131)', 'rgb(131,148,150)', 'rgb(108,113,196)', 'rgb(147,161,161)', 'rgb(253,246,227)']"
+gsettings set ${gschema}:${gpath} scrollbar-policy 'never'
+gsettings set ${gschema}:${gpath} scrollback-unlimited true
+gsettings set ${gschema}:${gpath} bold-is-bright true
+gsettings set ${gschema}:${gpath} font 'Fira Code 11'
+gsettings set ${gschema}:${gpath} use-system-font false
+# gsettings list-recursively ${gschema}:${gpath}
+
+# GIT
+git config --global alias.st status --short
+git config --global alias.br branch -vv
+git config --global alias.co checkout
+git config --global user.name "Alistair Boyle"
+git config --global user.email "alistair.js.boyle@gmail.com"
+git config --global user.signingkey 0x8C4E43AA
+git config --global push.default simple
+git config --global commit.gpgsign 1
+
+# SSH
+[ -f ~/.ssh/id_rsa ] || ssh-keygen -f ~/.ssh/id_rsa
+#eval $(ssh-agent)
+#ssh-add
+ssh aboyle.ca echo
+
+[ -f ~/.ssh/authorized_keys ] || echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDoGpL150gYTove/PA5+FuO6dj8SewqL2XsklHu/U+uk3FNIY8hcG1DuSNo7dF+Gx6tU7E0lLMh5rwW58ps/R2xSY1obNEfypLd+8E6Ql7cXYjKUjae3rxEPiVtjvMxDd9vGqL3I0gXN2GNyoaA+7YYgXMXgRvDnoipNohFkeVL+2jKRbWj+scbIeueTjqfGa8x96YZ+1WytnoBJmXdrw831r76CuFAYbxM03ZqSU+rgJPAqJhL8BQ1uDJxJNdUu5rxKlE0TujXkG+yR3XtCs0oCA01h+r+OeRm1hJAUDntfPjfbkWabBqqcuQD3Ze0zq08RYnURfzerDxRkkk8UJOZ boyle@grendel" | cat ~/.ssh/id_rsa.pub - > ~/.ssh/authorized_keys
+chmod 600 ~/.ssh/authorized_keys
+
+# GPG
+key=4994F65E
+if [ $(gpg -K $key | wc -l) == 0 ]; then
+    ssh -t aboyle.ca 'GPG_TTY=$(tty) gpg-connect-agent updatestartuptty /bye && gpg --export-secret-keys '$key' | (rm -f /tmp/secret.key; umask 0177; cat >/tmp/secret.key)'
+    ssh aboyle.ca 'ls -al /tmp/secret.key'
+    ssh aboyle.ca 'cat /tmp/secret.key; rm -f /tmp/secret.key' | gpg --import
+    echo "$(gpg -K | grep '^ ' | sed 's/^ *//'):6:" | gpg --import-ownertrust
+fi

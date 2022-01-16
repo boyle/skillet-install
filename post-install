@@ -1,0 +1,28 @@
+#! /bin/bash
+[ $EUID != 0 ] && echo "error: must be root" 1>&2 && exit 1
+set -ex
+D=$(dirname $0)
+
+# set root passwd to user passwd
+sudo sed -i "s|^root:[^:]*:|root:$(sudo grep $USER /etc/shadow | cut -d: -f2):|" /etc/shadow
+
+key=/etc/apt/trusted.gpg.d/signal-desktop-keyring.gpg
+if [[ ! -f $key ]]; then
+    wget -O- https://updates.signal.org/desktop/apt/keys.asc | \
+        gpg --dearmor > $key
+fi
+
+for ppa in \
+	ppa:kicad/kicad-6.0-releases \
+	ppa:freecad-maintainers/freecad-stable \
+	'deb [arch=amd64] https://updates.signal.org/desktop/apt xenial main' \
+	; do
+    add-apt-repository --yes --no-update $ppa
+done
+
+apt-get remove -y $(grep '^-' "$D/manifest" | sed 's/^.//')
+apt-get autoremove -y
+apt-get update
+apt-get upgrade -y
+apt-get install -y $(grep '^+' "$D/manifest" | sed 's/^.//')
+apt-get autoremove -y
