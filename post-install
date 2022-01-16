@@ -42,6 +42,18 @@ apt-get upgrade -y
 apt-get install -y $(grep '^+' "$D/manifest" | sed 's/^.//')
 apt-get autoremove -y
 
+if [[ "x$(which discord)" == "x" ]]; then
+    wget -O /tmp/discord.deb 'https://discord.com/api/download?platform=linux&format=deb'
+    apt-get install -y /tmp/discord.deb
+    rm -f /tmp/discord.deb
+fi
+
+if [[ "x$(which zoom)" == "x" ]]; then
+    wget -O /tmp/zoom.deb 'https://zoom.us/client/latest/zoom_amd64.deb'
+    apt-get install -y /tmp/zoom.deb
+    rm -f /tmp/zoom.deb
+fi
+
 # clean up dead directories
 rm -rf /var/lib/command-not-found
 rm -rf /home/*/snap
