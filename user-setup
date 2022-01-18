@@ -76,13 +76,6 @@ if [ ! -f ~/.vnc/passwd-aboyle.ca ]; then
     scp aboyle.ca:~/.vnc/passwd-aboyle.ca ~/.vnc/
 fi
 
-if [ "x$USER" == "xboyle" ]; then
-    sudo sed -i "s|^Icon=|Icon=/var/lib/AccountsService/icons/$USER|" "/var/lib/AccountsService/users/$USER"
-    [ -f "/tmp/$USER.jpg" ] || wget -O "/tmp/$USER.jpg" https://aboyle.ca/photo.jpg
-    convert "/tmp/$USER.jpg" -crop 110x110+18+18 -adaptive-resize 512x512 "/tmp/$USER-crop.jpg"
-    sudo install -m 755 -o root -g root "/tmp/$USER-crop.jpg" "/var/lib/AccountsService/icons/$USER"
-fi
-
 # firefox extensions
 [ -f /tmp/adblock.xpi ] || wget -O /tmp/adblock.xpi https://addons.mozilla.org/firefox/downloads/file/3877418/
 [ -f /tmp/foxyproxy.xpi ] || wget -O /tmp/foxyproxy.xpi https://addons.mozilla.org/firefox/downloads/file/3616824
@@ -92,3 +85,25 @@ $(dirname $0)/firefox-xpi /tmp/adblock.xpi
 $(dirname $0)/firefox-xpi /tmp/foxyproxy.xpi
 $(dirname $0)/firefox-xpi /tmp/languagetool.xpi
 $(dirname $0)/firefox-xpi /tmp/keepassxc.xpi
+
+# bash.d/powerline config
+grep -q '\<bash\.d\>' ~/.bashrc || echo 'for i in $(find ~/.bash.d/ | sort); do source "$i"; done' >> ~/.bashrc
+mkdir -p ~/.bash.d
+chmod 700 ~/.bash.d
+cat > ~/.bash.d/50-powerline << EOF
+if [ -f /usr/share/powerline/bindings/bash/powerline.sh ]; then
+  powerline-daemon -q
+  POWERLINE_BASH_CONTINUATION=1
+  POWERLINE_BASH_SELECT=1
+  source /usr/share/powerline/bindings/bash/powerline.sh
+fi
+EOF
+chmod +x ~/.bash.d/50-powerline
+
+grep -q 'powerline' ~/.vimrc || \
+    cat >> ~/.vimrc << EOF
+python3 from powerline.vim import setup as powerline_setup
+python3 powerline_setup()
+python3 del powerline_setup
+set laststatus=2
+EOF

@@ -54,6 +54,12 @@ if [[ "x$(which zoom)" == "x" ]]; then
     rm -f /tmp/zoom.deb
 fi
 
+sed -i "s|^Icon=|Icon=/var/lib/AccountsService/icons/boyle|" "/var/lib/AccountsService/users/boyle"
+[ -f "/tmp/boyle.jpg" ] || wget -O "/tmp/boyle.jpg" https://aboyle.ca/photo.jpg
+convert "/tmp/boyle.jpg" -crop 110x110+18+18 -adaptive-resize 512x512 "/tmp/boyle-crop.jpg"
+install -m 755 -o root -g root "/tmp/boyle-crop.jpg" "/var/lib/AccountsService/icons/boyle"
+
+
 # clean up dead directories
 rm -rf /var/lib/command-not-found
 rm -rf /home/*/snap
