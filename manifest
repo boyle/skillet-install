@@ -3,6 +3,7 @@
 -transmission-gtk
 -snapd
 -gnome-software-plugin-snap
+-nano
 +ansible
 +autoconf
 +blender

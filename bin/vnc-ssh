@@ -1,0 +1,7 @@
+#! /bin/sh
+VIA=$(basename $0)
+VIA=${VIA#*-}
+PASSWD=~/.vnc/passwd-${VIA}
+HOST=localhost
+SESSION=${1:-1}
+vncviewer -passwd ${PASSWD} -via ${VIA} ${HOST}:${SESSION}

@@ -1,0 +1,28 @@
+#! /bin/bash -x
+[ $# != 1 ] && echo "$(basename $0) <file.xpi>" 1>&2 && exit 1
+
+D=`ls -d ~/.mozilla/firefox/*.default-release`
+D="$D/extensions"
+mkdir -p $D
+
+get_addon_id_from_xpi () { #path to .xpi file --> read the "id" field
+    addon_id=`unzip -p $1 manifest.json | grep '"id":' -m 1 | cut -d: -f2 | sed -e 's/^[^"]*"//' -e 's/"[^"]*$//'`
+    echo "$addon_id"
+}
+
+# Installs .xpi given by relative path
+# to the extensions path given
+install_addon () {
+    xpi="${1}"
+    extensions_path=$2
+    new_filename=`get_addon_id_from_xpi $xpi`.xpi
+    new_filepath="${extensions_path}/${new_filename}"
+    if [ -f "$new_filepath" ]; then
+        echo "File already exists: $new_filepath"
+        echo "Skipping installation for addon $xpi."
+    else
+        cp "$xpi" "$new_filepath"
+    fi
+}
+
+install_addon "$1" "$D"

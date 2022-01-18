@@ -2,6 +2,7 @@
 (groups $USER | grep dialout) || sudo usermod -aG dialout $USER
 
 # Gnome Terminal settings
+gsettings set org.gnome.desktop.interface monospace-font-name 'Fira Code weight=453 9'
 gprofile=$(gsettings get org.gnome.Terminal.ProfilesList default | head -1 | sed "s/'//g")
 gschema=org.gnome.Terminal.Legacy.Profile
 gpath=/org/gnome/terminal/legacy/profiles:/:${gprofile}/
@@ -13,18 +14,29 @@ gsettings set ${gschema}:${gpath} palette "['rgb(7,54,66)', 'rgb(220,50,47)', 'r
 gsettings set ${gschema}:${gpath} scrollbar-policy 'never'
 gsettings set ${gschema}:${gpath} scrollback-unlimited true
 gsettings set ${gschema}:${gpath} bold-is-bright true
-gsettings set ${gschema}:${gpath} font 'Fira Code 11'
+gsettings set ${gschema}:${gpath} font 'Fira Code 10'
 gsettings set ${gschema}:${gpath} use-system-font false
 # gsettings list-recursively ${gschema}:${gpath}
 
 # set background
 gsettings set org.gnome.desktop.background picture-uri 'file:///usr/share/backgrounds/hardy_wallpaper_uhd.png'
 
+# mouse & keyboard settings
+gsettings set org.gnome.desktop.peripherals.touchpad speed 0.25
+gsettings set org.gnome.desktop.wm.preferences focus-mode 'sloppy'
+gsettings set org.gnome.desktop.peripherals.keyboard delay 259
+gsettings set org.gnome.settings-daemon.plugins.media-keys www "['<Super>w']"
+gsettings set org.gnome.settings-daemon.plugins.media-keys terminal "['<Super>t']"
+
+
 # setup launcher
+gsettings set org.gnome.desktop.interface clock-format 12h
+gsettings set org.gtk.Settings.FileChooser clock-format 12h
 gsettings set org.gnome.shell.extensions.dash-to-dock dock-position RIGHT
 gsettings set org.gnome.shell.extensions.dash-to-dock dash-max-icon-size 24
 gsettings set org.gnome.shell.extensions.dash-to-dock dock-fixed false
 gsettings set org.gnome.shell.extensions.dash-to-dock autohide true
+gsettings set org.gnome.shell.extensions.dash-to-dock show-trash false
 gnome-extensions enable openweather-extension@jenslody.de
 gsettings set org.gnome.shell.extensions.openweather unit celsius
 gsettings set org.gnome.shell.extensions.openweather wind-speed-unit knots
@@ -32,8 +44,6 @@ gsettings set org.gnome.shell.extensions.openweather pressure-unit kPa
 gsettings set org.gnome.shell.extensions.openweather city '45.4211435,-75.6900574>Ottawa, (Old) Ottawa, Ottawa, Eastern Ontario, Ontario, K1P 1J1, Canada >0'
 gsettings set org.gnome.shell.extensions.openweather days-forecast 3
 gnome-extensions enable system-monitor@paradoxxx.zero.gmail.com
-
-
 
 # GIT
 git config --global alias.st "status --short"
@@ -61,3 +71,24 @@ if [ $(gpg -K $key | wc -l) == 0 ]; then
     ssh aboyle.ca 'cat /tmp/secret.key; rm -f /tmp/secret.key' | gpg --import
     echo "$(gpg -K | grep '^ ' | sed 's/^ *//'):6:" | gpg --import-ownertrust
 fi
+
+if [ ! -f ~/.vnc/passwd-aboyle.ca ]; then
+    scp aboyle.ca:~/.vnc/passwd-aboyle.ca ~/.vnc/
+fi
+
+if [ "x$USER" == "xboyle" ]; then
+    sudo sed -i "s|^Icon=|Icon=/var/lib/AccountsService/icons/$USER|" "/var/lib/AccountsService/users/$USER"
+    [ -f "/tmp/$USER.jpg" ] || wget -O "/tmp/$USER.jpg" https://aboyle.ca/photo.jpg
+    convert "/tmp/$USER.jpg" -crop 110x110+18+18 -adaptive-resize 512x512 "/tmp/$USER-crop.jpg"
+    sudo install -m 755 -o root -g root "/tmp/$USER-crop.jpg" "/var/lib/AccountsService/icons/$USER"
+fi
+
+# firefox extensions
+[ -f /tmp/adblock.xpi ] || wget -O /tmp/adblock.xpi https://addons.mozilla.org/firefox/downloads/file/3877418/
+[ -f /tmp/foxyproxy.xpi ] || wget -O /tmp/foxyproxy.xpi https://addons.mozilla.org/firefox/downloads/file/3616824
+[ -f /tmp/languagetool.xpi ] || wget -O /tmp/languagetool.xpi https://addons.mozilla.org/firefox/downloads/file/3888056
+[ -f /tmp/keepassxc.xpi ] || wget -O /tmp/keepassxc.xpi https://addons.mozilla.org/firefox/downloads/file/3880031
+$(dirname $0)/firefox-xpi /tmp/adblock.xpi
+$(dirname $0)/firefox-xpi /tmp/foxyproxy.xpi
+$(dirname $0)/firefox-xpi /tmp/languagetool.xpi
+$(dirname $0)/firefox-xpi /tmp/keepassxc.xpi
