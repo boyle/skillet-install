@@ -54,6 +54,12 @@ if [[ "x$(which zoom)" == "x" ]]; then
     rm -f /tmp/zoom.deb
 fi
 
+if [[ "x$(which stl-thumb)" == "x" ]]; then
+    wget -O /tmp/stl-thumb.deb 'https://github.com/unlimitedbacon/stl-thumb/releases/download/v0.4.0/stl-thumb_0.4.0_amd64.deb'
+    apt-get install -y /tmp/stl-thumb.deb
+    rm -f /tmp/stl-thumb.deb
+fi
+
 # clean up dead directories
 rm -rf /var/lib/command-not-found
 rm -rf /home/*/snap

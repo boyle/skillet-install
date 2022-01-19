@@ -22,7 +22,9 @@
 +gmsh
 +gnome-shell-extension-system-monitor
 +gnome-shell-extension-weather
++htop
 +inkscape
++intel-opencl-icd
 +iptables-persistent
 +keepassxc
 +kicad
@@ -30,10 +32,13 @@
 +liblapacke-dev
 +libopenblas-dev
 +libsuitesparse-dev
++meshlab
 +nautilus-nextcloud
 +netgen
 +nextcloud-desktop
 +nextcloud-desktop-cmd
++openscad
++pocl-opencl-icd
 +powerline
 +prusa-slicer
 +signal-desktop

@@ -1,5 +1,5 @@
 #! /bin/bash
 D="$(dirname $0)"
-comm -23 <(apt-mark showmanual | sort -u | grep -v -e discord -e zoom) <(gzip -dc /var/log/installer/initial-status.gz | sed -n 's/^Package: //p' | sort -u) | \
+comm -23 <(apt-mark showmanual | sort -u | grep -v -e discord -e zoom -e stl-thumb) <(gzip -dc /var/log/installer/initial-status.gz | sed -n 's/^Package: //p' | sort -u) | \
 	diff -u0 "$D/manifest-remove" - | grep '^[+-][^+-]'
 
