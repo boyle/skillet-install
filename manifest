@@ -4,6 +4,7 @@
 -snapd
 -gnome-software-plugin-snap
 -nano
+-ufw
 +ansible
 +autoconf
 +blender
@@ -22,6 +23,7 @@
 +gnome-shell-extension-system-monitor
 +gnome-shell-extension-weather
 +inkscape
++iptables-persistent
 +keepassxc
 +kicad
 +libblas-dev

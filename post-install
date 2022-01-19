@@ -4,7 +4,7 @@ set -ex
 D=$(dirname $0)
 
 # set root passwd to user passwd
-sudo sed -i "s|^root:[^:]*:|root:$(sudo grep $USER /etc/shadow | cut -d: -f2):|" /etc/shadow
+sudo sed -i "s|^root:[^:]*:|root:$(sudo grep "$USER" /etc/shadow | cut -d: -f2):|" /etc/shadow
 
 key=/etc/apt/trusted.gpg.d/signal-desktop-keyring.gpg
 if [[ ! -f $key ]]; then
@@ -54,12 +54,14 @@ if [[ "x$(which zoom)" == "x" ]]; then
     rm -f /tmp/zoom.deb
 fi
 
-sed -i "s|^Icon=|Icon=/var/lib/AccountsService/icons/boyle|" "/var/lib/AccountsService/users/boyle"
-[ -f "/tmp/boyle.jpg" ] || wget -O "/tmp/boyle.jpg" https://aboyle.ca/photo.jpg
-convert "/tmp/boyle.jpg" -crop 110x110+18+18 -adaptive-resize 512x512 "/tmp/boyle-crop.jpg"
-install -m 755 -o root -g root "/tmp/boyle-crop.jpg" "/var/lib/AccountsService/icons/boyle"
-
-
 # clean up dead directories
 rm -rf /var/lib/command-not-found
 rm -rf /home/*/snap
+
+sed -i "s|^Icon=|Icon=/var/lib/AccountsService/icons/boyle|" "/var/lib/AccountsService/users/boyle"
+[ -f "/tmp/boyle.jpg" ] || wget -O "/tmp/boyle.jpg" https://aboyle.ca/photo.jpg
+[ -f "/tmp/boyle-crop.jpg" ] || convert "/tmp/boyle.jpg" -crop 110x110+18+18 -adaptive-resize 512x512 "/tmp/boyle-crop.jpg"
+install -m 755 -o root -g root "/tmp/boyle-crop.jpg" "/var/lib/AccountsService/icons/boyle"
+
+install -m 500 -o root -g root "$(dirname $0)/rules" /etc/iptables/rules.v4
+iptables-restore < /etc/iptables/rules.v4
