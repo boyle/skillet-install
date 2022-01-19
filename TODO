@@ -4,8 +4,6 @@ User
 - load gpg key (from aboyle.ca?)
 - setup virtual machines
 - setup work repos
-- bash powerline
-- vim powerline
 - pull down EIDORS
    \$ cd ~/proj && git svn clone svn+ssh://alistair_boyle@svn.code.sf.net/p/eidors3d/code/trunk eidors3d.git
 - install matlab
