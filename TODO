@@ -12,6 +12,7 @@ User
    \$ scp aboyle.ca:~/bin/eidors ~/bin/
 - get most recent repositories (depot)
 - x48 calculator emulator
+- KeepassXC config --> skel/.config/keepassxc/keepassxc.ini
 
 System
 ======
@@ -26,7 +27,6 @@ Not Automated
 =============
 - pair Signal with phone
 - add ssh authorized_keys to grendel (post-install)
-- KeepassXC config
 - Teams config
 - SSH keys to sourceforge
 - SSH keys to github
