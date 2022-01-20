@@ -22,6 +22,7 @@
 +gmsh
 +gnome-shell-extension-system-monitor
 +gnome-shell-extension-weather
++gnome-sushi
 +htop
 +inkscape
 +intel-opencl-icd
@@ -41,6 +42,7 @@
 +pocl-opencl-icd
 +powerline
 +prusa-slicer
++rclone
 +restic
 +signal-desktop
 +sshfs

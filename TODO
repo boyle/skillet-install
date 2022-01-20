@@ -18,6 +18,9 @@ System
 - setup restic (backup)
 - setup printer, see printer.txt
    \$ scp aboyle.ca:~/printer.txt
+- firmware-sof-signed (audio firmware) ... but collides with linux-firmware
+  https://bugs.launchpad.net/ubuntu/+source/firmware-sof/+bug/1956215
+- possibly install TLP
 
 Not Automated
 =============
@@ -33,3 +36,4 @@ Not Automated
 - config steam: add account
 - config zoom: add account
 - config discord: add account
+- config rclone
