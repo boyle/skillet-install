@@ -37,3 +37,7 @@ Not Automated
 - config zoom: add account
 - config discord: add account
 - config rclone
+
+- firefox:
+  - disable DNS of HTTPS for octopi.aboyle.ca (about:preferences#general > Network Settings > Settings > Enable DNS over HTTPS = disabled)
+  - add security certificate for octopi.aboyle.ca (about:preferences#privacy > Certificates > Servers > Add Exception = octopi.aboyle.ca
