@@ -41,6 +41,8 @@ if [ "x$(VBoxManage list vms | cut -f1 -d' ' | sed 's/"//g' | grep -m1 "^$VM\$")
     VBoxManage createvm --name $VM --ostype $OS --register
     VBoxManage modifyvm $VM --ioapic on
     VBoxManage modifyvm $VM --memory $MEM --vram 256
+    VBoxManage modifyvm $VM --graphicscontroller vboxsvga --accelerate3d on --accelerate2dvideo on
+    VBoxManage modifyvm $VM --draganddrop bidirectional --clipboard bidirectional
     VBoxManage createhd --filename "$BASE/$VM/$VM.vdi" --size 80000 --format VDI
     VBoxManage storagectl $VM --name "SATA Controller" --add sata --controller IntelAhci
     VBoxManage storageattach $VM --storagectl "SATA Controller" --port 0 --device 0 --type hdd --medium "$BASE/$VM/$VM.vdi"

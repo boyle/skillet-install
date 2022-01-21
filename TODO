@@ -44,3 +44,7 @@ Not Automated
 
 - setup win10 unattended install properly (vbox default almost works except for the question about install media)
   https://docs.microsoft.com/en-us/windows-hardware/get-started/adk-install
+- win10 firefox install
+- win10 fusion360 install
+- win10 work tools install
+- win10 shared folder setup
