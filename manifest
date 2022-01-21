@@ -26,6 +26,7 @@
 +gnome-shell-extension-system-monitor
 +gnome-shell-extension-weather
 +gnome-sushi
++gtkwave
 +htop
 +inkscape
 +intel-opencl-icd
@@ -43,6 +44,7 @@
 +netgen
 +nextcloud-desktop
 +nextcloud-desktop-cmd
++ngspice
 +octave
 +openscad
 +pocl-opencl-icd
@@ -60,5 +62,6 @@
 +ubuntu-wallpapers-focal
 +vim
 +virtualbox
++virtualbox-ext-pack
 +virtualbox-guest-additions-iso
 +zlib1g-dev

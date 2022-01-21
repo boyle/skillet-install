@@ -1,0 +1,14 @@
+#! /bin/bash -ex
+mkdir -p ~/work
+cd ~/work
+for i in $(ssh aboyle.ca "find ~/work -name config -path \*/.git/\* -not -path \*/candidate-\* -maxdepth 3"); do
+    scp aboyle.ca:$i /tmp/gitconfig
+    D="$(echo "$i" | cut -d/ -f5)"
+    REPO="$(grep url /tmp/gitconfig | cut -d= -f2)"
+    EMAIL="$(grep email /tmp/gitconfig | cut -d= -f2 | sed 's/ //g')"
+    [ -d "$D" ] && echo "$D: exists" && continue
+    git clone $REPO $D
+    pushd $D
+    [ -n "$EMAIL" ] && git config user.email "$EMAIL"
+    popd
+done

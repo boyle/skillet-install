@@ -34,6 +34,8 @@ if [ -d /var/cache/snapd ]; then
     rm -rf /var/cache/snapd/
 fi
 
+# pre-accept licenses
+echo virtualbox-ext-pack virtualbox-ext-pack/license select true | debconf-set-selections
 # APT upgrade/install/remove
 apt-get remove -y --purge $(grep '^-' "$D/manifest" | sed 's/^.//')
 apt-get autoremove -y
