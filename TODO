@@ -39,7 +39,7 @@ Not Automated
 - config rclone
 
 - firefox:
-  - disable DNS of HTTPS for octopi.aboyle.ca (about:preferences#general > Network Settings > Settings > Enable DNS over HTTPS = disabled)
+  - disable DNS over HTTPS for octopi.aboyle.ca (about:preferences#general > Network Settings > Settings > Enable DNS over HTTPS = disabled)
   - add security certificate for octopi.aboyle.ca (about:preferences#privacy > Certificates > Servers > Add Exception = octopi.aboyle.ca
 
 - setup win10 unattended install properly (vbox default almost works except for the question about install media)
@@ -48,3 +48,5 @@ Not Automated
 - win10 fusion360 install
 - win10 work tools install
 - win10 shared folder setup
+
+- ~/.ssh/config from backup
