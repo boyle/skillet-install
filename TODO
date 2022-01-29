@@ -50,3 +50,9 @@ Not Automated
 - win10 shared folder setup
 
 - ~/.ssh/config from backup
+
+- setup Prusa-Slicer to talk to OctoPi
+  "Printer Settings" > Gear (Settings)
+  --> Hostname: https://octopi.aboyle.ca
+  --> API Key <-- go to octopi.aboyle.ca > User > Application Keys > ... generate a new key
+  --> HTTPS CA File: ~/Nextcloud/myCA.crt
