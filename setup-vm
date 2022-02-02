@@ -32,7 +32,24 @@ set +x
 echo "$PASSWD" > "$PASSWDFILE"
 set -x
 
-[ -f "$D/$ISO" ] || rsync --checksum --info=progress2 "aboyle.ca:/var/data/boyle-downloads/$ISO" "$D/"
+FF_URL="https://cdn.stubdownloader.services.mozilla.com/builds/firefox-stub/en-US/win/5e390326e0ae6db3900bb119921e434b302f3669b8dcd78244fc3da306d067b8/Firefox%20Installer.exe"
+F360_URL="https://dl.appstreaming.autodesk.com/production/installers/Fusion%20360%20Client%20Downloader.exe"
+for i in "$ISO" 'Firefox Installer.exe' 'Fusion 360 Client Downloader.exe' 'Sciospec EIT Software V1.16.zip' 'Swisstom EIT v2.7.2.zip'; do
+    [ -f "$D/$i" ] || rsync --checksum --info=progress2 "aboyle.ca:/var/data/boyle-downloads/$i" "$D/"
+done
+cat > $D/post-install.bat << EOF
+@echo off
+title Post Install
+echo "Installing Firefox"
+"M:\Firefox Installer.exe" -ms -ma
+echo "Installing Fusion360"
+"M:\Fusion 360 Client Downloader.exe" -i deploy
+"C:\Program Files (x86)\Microsoft\Edge\Application\97.0.1072.76\Installer\setup.exe" --uninstall --system-level --force-uninstall
+EOF
+# TODO unzip and make links for the EIT software
+#mklink "Sciospec V1.16" "C:\Sciospec EIT Software V1.16\"
+#mklink "Swisstom V2.7.2" "C:\Swisstom EIT v2.7.2"
+
 #VBoxManage list ostypes
 #VBoxManage unattended detect --iso="$D/$ISO"
 VBoxManage modifyvm $VM --hdd none
@@ -47,17 +64,17 @@ if [ "x$(VBoxManage list vms | cut -f1 -d' ' | sed 's/"//g' | grep -m1 "^$VM\$")
     VBoxManage storagectl $VM --name "SATA Controller" --add sata --controller IntelAhci
     VBoxManage storageattach $VM --storagectl "SATA Controller" --port 0 --device 0 --type hdd --medium "$BASE/$VM/$VM.vdi"
     VBoxManage storagectl $VM --name "IDE Controller" --add ide --controller PIIX4
-    #VBoxManage storageattach $VM --storagectl "IDE Controller" --port 1 --device 0 --type dvddrive --medium "$BASE/$VM/debian.iso"
     VBoxManage modifyvm $VM --boot1 floppy --boot2 dvd --boot3 disk --boot4 none
-    #VBoxManage modifyvm $VM --vrde on --vrdemulticon on --vrdeport 10001 # enable RDP
     VBoxManage modifyvm $VM --cpus $NCPU
     VBoxManage modifyvm $VM --usb on
     VBoxManage modifyvm $VM --usbehci on
     VBoxManage modifyvm $VM --usbxhci on
+    VBoxManage sharedfolder add $VM --name downloads --hostpath /var/tmp/downloads --automount --readonly --auto-mount-point="M:"
     VBoxManage unattended install $VM --iso="$D/$ISO" \
         --user "$USER" --password-file="$PASSWDFILE" --full-user-name="$USERNAME" \
         --key="$KEY" \
         --install-additions --additions-iso="/usr/share/virtualbox/VBoxGuestAdditions.iso" \
-        --country=CA --time-zone=EST
+        --country=CA --time-zone=EST \
+        --post-install-command='powershell.exe -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command M:\post-install.bat'
 fi
 #VBoxHeadless --startvm $VM
