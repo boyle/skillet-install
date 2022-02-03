@@ -21,7 +21,6 @@ System
    \$ scp aboyle.ca:~/printer.txt
 - firmware-sof-signed (audio firmware) ... but collides with linux-firmware
   https://bugs.launchpad.net/ubuntu/+source/firmware-sof/+bug/1956215
-- possibly install TLP
 
 Not Automated
 =============
