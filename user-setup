@@ -1,9 +1,10 @@
-#! /bin/bash -ex
+#! /bin/bash -e
+echo "add user to {dialout,vboxusers} groups"
 for i in dialout vboxusers; do
-    (groups $USER | grep $i) || sudo usermod -aG $i $USER
+    (groups $USER | grep -q $i) || sudo usermod -aG $i $USER
 done
 
-# Gnome Terminal settings
+echo "setup Gnome Terminal settings"
 gsettings set org.gnome.desktop.interface monospace-font-name 'Fira Code weight=453 9'
 gprofile=$(gsettings get org.gnome.Terminal.ProfilesList default | head -1 | sed "s/'//g")
 gschema=org.gnome.Terminal.Legacy.Profile
@@ -20,6 +21,7 @@ gsettings set ${gschema}:${gpath} font 'Fira Code 10'
 gsettings set ${gschema}:${gpath} use-system-font false
 # gsettings list-recursively ${gschema}:${gpath}
 
+echo "setup window manager"
 # set background
 gsettings set org.gnome.desktop.background picture-uri 'file:///usr/share/backgrounds/hardy_wallpaper_uhd.png'
 gsettings set org.gnome.settings-daemon.plugins.color night-light-enabled true
@@ -35,7 +37,6 @@ gsettings set org.gnome.desktop.wm.preferences focus-mode 'sloppy'
 gsettings set org.gnome.desktop.peripherals.keyboard delay 259
 gsettings set org.gnome.settings-daemon.plugins.media-keys www "['<Super>w']"
 gsettings set org.gnome.settings-daemon.plugins.media-keys terminal "['<Super>t']"
-
 
 # setup launcher
 gsettings set org.gnome.desktop.interface clock-format 12h
@@ -53,20 +54,8 @@ gsettings set org.gnome.shell.extensions.openweather city '45.4211435,-75.690057
 gsettings set org.gnome.shell.extensions.openweather days-forecast 3
 gnome-extensions enable system-monitor@paradoxxx.zero.gmail.com
 
-# GIT
-git config --global alias.st "status --short"
-git config --global alias.br "branch -vv"
-git config --global alias.co checkout
-git config --global alias.ll "log origin/master..HEAD --stat"
-git config --global user.name "Alistair Boyle"
-git config --global user.email "alistair.js.boyle@gmail.com"
-git config --global user.signingkey 0x8C4E43AA
-git config --global push.default simple
-git config --global commit.gpgsign true
-git config --global tag.gpgsign true
-git config --global fetch.prune true
-
 # SSH
+echo "restore SSH"
 [ -f ~/.ssh/id_rsa ] || ssh-keygen -f ~/.ssh/id_rsa
 #eval $(ssh-agent)
 #ssh-add
@@ -76,6 +65,7 @@ chmod 600 ~/.ssh/authorized_keys
 
 # GPG
 key=4994F65E
+echo "restore GPG secret key $key"
 if [ $(gpg -K $key | wc -l) == 0 ]; then
     ssh -t aboyle.ca 'GPG_TTY=$(tty) gpg-connect-agent updatestartuptty /bye && gpg --export-secret-keys '$key' | (rm -f /tmp/secret.key; umask 0177; cat >/tmp/secret.key)'
     ssh aboyle.ca 'ls -al /tmp/secret.key'
@@ -83,11 +73,12 @@ if [ $(gpg -K $key | wc -l) == 0 ]; then
     echo "$(gpg -K | grep '^ ' | sed 's/^ *//'):6:" | gpg --import-ownertrust
 fi
 
+echo "vnc passwd for aboyle.ca"
 if [ ! -f ~/.vnc/passwd-aboyle.ca ]; then
     scp aboyle.ca:~/.vnc/passwd-aboyle.ca ~/.vnc/
 fi
 
-# firefox extensions
+echo "install firefox extensions"
 [ -f /tmp/adblock.xpi ] || wget -O /tmp/adblock.xpi https://addons.mozilla.org/firefox/downloads/file/3877418/
 [ -f /tmp/foxyproxy.xpi ] || wget -O /tmp/foxyproxy.xpi https://addons.mozilla.org/firefox/downloads/file/3616824
 [ -f /tmp/languagetool.xpi ] || wget -O /tmp/languagetool.xpi https://addons.mozilla.org/firefox/downloads/file/3888056
@@ -97,21 +88,28 @@ $(dirname $0)/firefox-xpi /tmp/foxyproxy.xpi
 $(dirname $0)/firefox-xpi /tmp/languagetool.xpi
 $(dirname $0)/firefox-xpi /tmp/keepassxc.xpi
 
-# bash.d/powerline config
+
+echo "setup ~/bash.d for ~/.bashrc"
 grep -q '\<bash\.d\>' ~/.bashrc || echo 'for i in $(find ~/.bash.d/ -type f -executable | sort); do source "$i"; done' >> ~/.bashrc
 mkdir -p ~/.bash.d
 chmod 700 ~/.bash.d
-cat > ~/.bash.d/50-powerline << EOF
-if [ -f /usr/share/powerline/bindings/bash/powerline.sh ]; then
-  powerline-daemon -q
-  POWERLINE_BASH_CONTINUATION=1
-  POWERLINE_BASH_SELECT=1
-  source /usr/share/powerline/bindings/bash/powerline.sh
-fi
-EOF
-chmod +x ~/.bash.d/50-powerline
 
-[ -f ~/.vimrc ] || cp skel/.vimrc ~/
+echo "install skel/ to $HOME"
+for i in $(find skel -type f | sed 's|^skel/||' | sort); do
+    if [ -f ~/$i ]; then
+        if diff -q ~/$i skel/$i > /dev/null; then
+            echo " - $i: skipped (already exists)"
+        else
+            echo " ~ $i: skipped (differs from 'skel/')"
+        fi
+        continue
+    fi
+    mkdir -p $(dirname $i)
+    cp skel/$i ~/$i
+    echo " + $i"
+done
+
+echo "install vim plugins..."
 [ -d ~/.vim/bundle/Vundle.vim ] || \
     git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 vim +PluginInstall +qall

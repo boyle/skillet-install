@@ -1,0 +1,19 @@
+[alias]
+	st = status --short
+	br = branch -vv
+	co = checkout
+	ll = log origin/master..HEAD --stat
+[user]
+	name = Alistair Boyle
+	email = alistair.js.boyle@gmail.com
+	signingkey = 0x8C4E43AA
+[push]
+	default = simple
+[commit]
+	gpgsign = true
+[pull]
+	ff = only
+[tag]
+	gpgsign = true
+[fetch]
+	prune = true
