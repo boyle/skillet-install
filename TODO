@@ -5,11 +5,9 @@ User
 - setup virtual machines
 - setup work repos
 - pull down EIDORS
-   \$ cd ~/proj && git svn clone svn+ssh://alistair_boyle@svn.code.sf.net/p/eidors3d/code/trunk eidors3d.git
-- install matlab
-   \$ cd ~/bin && ln -sf /opt/matlab/r2017a/bin/matlab
+   $ cd ~/proj && git svn clone svn+ssh://alistair_boyle@svn.code.sf.net/p/eidors3d/code/trunk eidors3d.git
 - install the eidors wrapper
-   \$ scp aboyle.ca:~/bin/eidors ~/bin/
+   $ scp aboyle.ca:~/bin/eidors ~/bin/
 - get most recent repositories (depot)
 - x48 calculator emulator
 - KeepassXC config --> skel/.config/keepassxc/keepassxc.ini
@@ -18,7 +16,7 @@ System
 ======
 - setup restic (backup)
 - setup printer, see printer.txt
-   \$ scp aboyle.ca:~/printer.txt
+   $ scp aboyle.ca:~/printer.txt
 - firmware-sof-signed (audio firmware) ... but collides with linux-firmware
   https://bugs.launchpad.net/ubuntu/+source/firmware-sof/+bug/1956215
 
@@ -36,6 +34,15 @@ Not Automated
 - config zoom: add account
 - config discord: add account
 - config rclone
+
+- install matlab
+   $ scp aboyle.ca:/var/data/boyle-downloads/matlab2021a.tar.gz /var/tmp/downloads/
+   ... manual install
+   $ cd /usr/local/bin && sudo ln -s /opt/matlab/r2021a/bin/matlab
+   set the DPI for 4k screens
+   $ matlab
+   >> s = settings;s.matlab.desktop.DisplayScaleFactor
+   >> s.matlab.desktop.DisplayScaleFactor.PersonalValue = 1.5
 
 - firefox:
   - disable DNS over HTTPS for octopi.aboyle.ca (about:preferences#general > Network Settings > Settings > Enable DNS over HTTPS = disabled)
