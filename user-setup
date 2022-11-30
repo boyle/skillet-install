@@ -97,7 +97,7 @@ chmod 700 ~/.bash.d
 echo "install skel/ to $HOME"
 for i in $(find skel -type f | sed 's|^skel/||' | sort); do
     if [ -f ~/$i ]; then
-        if diff -q ~/$i skel/$i > /dev/null; then
+        if diff -rq ~/$i skel/$i > /dev/null; then
             echo " - $i: skipped (already exists)"
         else
             echo " ~ $i: skipped (differs from 'skel/')"
