@@ -18,7 +18,8 @@ if [[ ! -f $key ]]; then
 fi
 
 for ppa in \
-	ppa:kicad/kicad-6.0-releases \
+	ppa:phoerious/keepassxc \
+	ppa:kicad/kicad-7.0-releases \
 	ppa:freecad-maintainers/freecad-stable \
 	'deb [arch=amd64] https://updates.signal.org/desktop/apt xenial main' \
 	'deb [arch=amd64] https://packages.microsoft.com/repos/ms-teams stable main' \
