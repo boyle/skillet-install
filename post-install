@@ -16,6 +16,11 @@ if [[ ! -f $key ]]; then
     wget -O- https://packages.microsoft.com/keys/microsoft.asc | \
         gpg --dearmor > $key
 fi
+key=/etc/apt/trusted.gpg.d/packages-pgadmin-org.gpg
+if [[ ! -f $key ]]; then
+    wget -O- https://www.pgadmin.org/static/packages_pgadmin_org.pub | \
+        gpg --dearmor > $key
+fi
 
 for ppa in \
 	ppa:phoerious/keepassxc \
@@ -23,6 +28,7 @@ for ppa in \
 	ppa:freecad-maintainers/freecad-stable \
 	'deb [arch=amd64] https://updates.signal.org/desktop/apt xenial main' \
 	'deb [arch=amd64] https://packages.microsoft.com/repos/ms-teams stable main' \
+	'deb https://ftp.postgresql.org/pub/pgadmin/pgadmin4/apt/jammy pgadmin4 main' \
 	; do
     add-apt-repository --yes --no-update $ppa
 done
