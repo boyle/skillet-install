@@ -79,7 +79,7 @@ if [ ! -f ~/.vnc/passwd-aboyle.ca ]; then
 fi
 
 echo "install firefox extensions"
-[ -f /tmp/adblock.xpi ] || wget -O /tmp/adblock.xpi https://addons.mozilla.org/firefox/downloads/file/3877418/
+[ -f /tmp/adblock.xpi ] || wget -O /tmp/adblock.xpi https://addons.mozilla.org/firefox/downloads/file/4113999/
 [ -f /tmp/foxyproxy.xpi ] || wget -O /tmp/foxyproxy.xpi https://addons.mozilla.org/firefox/downloads/file/3616824
 [ -f /tmp/languagetool.xpi ] || wget -O /tmp/languagetool.xpi https://addons.mozilla.org/firefox/downloads/file/3888056
 [ -f /tmp/keepassxc.xpi ] || wget -O /tmp/keepassxc.xpi https://addons.mozilla.org/firefox/downloads/file/3880031
@@ -108,6 +108,17 @@ for i in $(find skel -type f | sed 's|^skel/||' | sort); do
     cp skel/$i ~/$i
     echo " + $i"
 done
+# pull repos for ~/work
+work_repos=(
+    "git2@projectiv.ca:boyle/business.git"
+    "git2@projectiv.ca:boyle/perp.git"
+    )
+pushd ~/work > /dev/null
+for i in ${work_repos[*]}; do
+    dir=$(basename ${i%.*})
+    [ -d $(basename $dir) ] || git clone $i
+done
+popd > /dev/null
 
 echo "install vim plugins..."
 [ -d ~/.vim/bundle/Vundle.vim ] || \
