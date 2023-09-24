@@ -5,10 +5,10 @@ filetype off                  " required
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 Plugin 'vundle'
-Plugin 'command-t'
-Plugin 'DrawIt'
-Plugin 'spice.vim'
-Plugin 'vim-colors-solarized'
+Plugin 'wincent/command-t'
+Plugin 'vim-scripts/DrawIt'
+Plugin 'ftorres16/spice.vim'
+Plugin 'altercation/vim-colors-solarized'
 call vundle#end()            " required
 filetype plugin indent on    " required
 " Install plugins through Vundle
