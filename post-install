@@ -6,30 +6,29 @@ D=$(dirname $0)
 # set root passwd to user passwd
 sudo sed -i "s|^root:[^:]*:|root:$(sudo grep "$USER" /etc/shadow | cut -d: -f2):|" /etc/shadow
 
-key=/etc/apt/trusted.gpg.d/signal-desktop-keyring.gpg
-if [[ ! -f $key ]]; then
-    wget -O- https://updates.signal.org/desktop/apt/keys.asc | \
-        gpg --dearmor > $key
-fi
-key=/etc/apt/trusted.gpg.d/microsoft-teams-keyring.gpg
-if [[ ! -f $key ]]; then
-    wget -O- https://packages.microsoft.com/keys/microsoft.asc | \
-        gpg --dearmor > $key
-fi
-key=/etc/apt/trusted.gpg.d/packages-pgadmin-org.gpg
-if [[ ! -f $key ]]; then
-    wget -O- https://www.pgadmin.org/static/packages_pgadmin_org.pub | \
-        gpg --dearmor > $key
-fi
+aptkeys=(
+    "https://updates.signal.org/desktop/apt/keys.asc|signal-desktop-keyring.gpg"
+    "https://packages.microsoft.com/keys/microsoft.asc|microsoft-teams-keyring.gpg"
+    "https://www.pgadmin.org/static/packages_pgadmin_org.pub|packages-pgadmin-org.gpg"
+    "https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key|nodesource.gpg"
+    )
+echo ${aptkeys[*]}
+for i in ${aptkeys[*]}; do
+    url="${i%|*}"
+    key="/etc/apt/trusted.gpg.d/${i#*|}"
+    [ -f $key ] || wget -O- $url | gpg --dearmor > $key
+done
 
+NODEJS_VER=20
 for ppa in \
-	ppa:phoerious/keepassxc \
-	ppa:kicad/kicad-7.0-releases \
-	ppa:freecad-maintainers/freecad-stable \
-	'deb [arch=amd64] https://updates.signal.org/desktop/apt xenial main' \
-	'deb [arch=amd64] https://packages.microsoft.com/repos/ms-teams stable main' \
-	'deb https://ftp.postgresql.org/pub/pgadmin/pgadmin4/apt/jammy pgadmin4 main' \
-	; do
+    ppa:phoerious/keepassxc \
+    ppa:kicad/kicad-7.0-releases \
+    ppa:freecad-maintainers/freecad-stable \
+    'deb [arch=amd64] https://updates.signal.org/desktop/apt xenial main' \
+    'deb [arch=amd64] https://packages.microsoft.com/repos/ms-teams stable main' \
+    'deb https://ftp.postgresql.org/pub/pgadmin/pgadmin4/apt/jammy pgadmin4 main' \
+    "deb https://deb.nodesource.com/node_$NODEJS_VER.x nodistro main" \
+    ; do
     add-apt-repository --yes --no-update $ppa
 done
 
@@ -51,23 +50,19 @@ apt-get upgrade -y
 apt-get install -y $(grep '^+' "$D/manifest" | sed 's/^.//')
 apt-get autoremove -y
 
-if [[ "x$(which discord)" == "x" ]]; then
-    wget -O /tmp/discord.deb 'https://discord.com/api/download?platform=linux&format=deb'
-    apt-get install -y /tmp/discord.deb
-    rm -f /tmp/discord.deb
-fi
-
-if [[ "x$(which zoom)" == "x" ]]; then
-    wget -O /tmp/zoom.deb 'https://zoom.us/client/latest/zoom_amd64.deb'
-    apt-get install -y /tmp/zoom.deb
-    rm -f /tmp/zoom.deb
-fi
-
-if [[ "x$(which stl-thumb)" == "x" ]]; then
-    wget -O /tmp/stl-thumb.deb 'https://github.com/unlimitedbacon/stl-thumb/releases/download/v0.4.0/stl-thumb_0.4.0_amd64.deb'
-    apt-get install -y /tmp/stl-thumb.deb
-    rm -f /tmp/stl-thumb.deb
-fi
+debs=(
+    'https://discord.com/api/download?platform=linux&format=deb|discord'
+    'https://zoom.us/client/latest/zoom_amd64.deb|zoom'
+    'https://github.com/unlimitedbacon/stl-thumb/releases/download/v0.4.0/stl-thumb_0.4.0_amd64.deb|stl-thumb'
+    )
+for i in ${debs[*]}; do
+    url="${i%|*}"
+    bin="${i#*|}"
+    [[ "x$(which $bin)" != "x" ]] && continue
+    wget -O /tmp/$bin.deb $url
+    apt-get install -y /tmp/$bin.deb
+    rm -f /tmp/$bin.deb
+done
 
 # clean up dead directories
 rm -rf /var/lib/command-not-found
