@@ -9,6 +9,9 @@ Plugin 'wincent/command-t'
 Plugin 'vim-scripts/DrawIt'
 Plugin 'ftorres16/spice.vim'
 Plugin 'altercation/vim-colors-solarized'
+Plugin 'othree/html5.vim'
+Plugin 'pangloss/vim-javascript'
+Plugin 'evanleck/vim-svelte'
 call vundle#end()            " required
 filetype plugin indent on    " required
 " Install plugins through Vundle
