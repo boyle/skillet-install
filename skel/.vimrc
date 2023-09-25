@@ -2,24 +2,32 @@ set nocompatible              " be iMproved, required
 filetype off                  " required
 
 " set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-Plugin 'vundle'
-Plugin 'wincent/command-t'
-Plugin 'vim-scripts/DrawIt'
-Plugin 'ftorres16/spice.vim'
-Plugin 'altercation/vim-colors-solarized'
-Plugin 'othree/html5.vim'
-Plugin 'pangloss/vim-javascript'
-Plugin 'evanleck/vim-svelte'
-call vundle#end()            " required
+call plug#begin()
+Plug 'wincent/command-t'
+Plug 'vim-scripts/DrawIt'
+Plug 'ftorres16/spice.vim'
+Plug 'altercation/vim-colors-solarized'
+Plug 'othree/html5.vim'
+Plug 'pangloss/vim-javascript'
+Plug 'evanleck/vim-svelte'
+Plug 'ryanoasis/vim-devicons'
+Plug 'junegunn/goyo.vim'
+Plug 'junegunn/limelight.vim'
+Plug 'mattn/emmet-vim'
+Plug 'dense-analysis/ale'
+call plug#end()            " required
 filetype plugin indent on    " required
-" Install plugins through Vundle
-" $ vim +PluginInstall +qall
+" Install plugins through vim-plug
+" $ vim +PlugInstall +qall
 
 syntax enable
 set background=dark
 colorscheme solarized
+let g:limelight_conceal_ctermfg = 245  " Solarized Base1
+let g:limelight_conceal_guifg = '#8a8a8a'  " Solarized Base1
+set updatetime=100 " for vim-gitgutter updates @ 100ms
+" fix vim-gitgutter background for solarized colours
+autocmd ColorScheme * highlight! link SignColumn LineNr
 
 python3 from powerline.vim import setup as powerline_setup
 python3 powerline_setup()
